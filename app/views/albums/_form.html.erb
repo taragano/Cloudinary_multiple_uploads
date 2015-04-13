@@ -63,7 +63,7 @@
         });         
       }
     });
-    $('.cloudinary-fileupload').on('cloudinarydone', function(e, data){
+    $('.cloudinary-fileupload').cloudinary_fileupload().on('cloudinarydone', function(e, data){
       $('#preview_images').append($.cloudinary.image(data.result.public_id, {width: 50, height: 50, crop: "fill"}));
     })
     .on('cloudinaryprogressall', function(e, data){
