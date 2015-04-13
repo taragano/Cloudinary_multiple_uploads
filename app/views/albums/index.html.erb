@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Albums</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @albums.each do |album| %>
+      <tr>
+        <td><%= cl_image_tag(album.photos.first.image.thumb.url) if album.photos.any? %></td>
+        <td><%= album.title %></td>
+        <td><%= link_to 'Show', album %></td>
+        <td><%= link_to 'Edit (Server-side)', edit_album_path(album) %></td>
+        <td><%= link_to 'Edit (Client-side)', edit_album_path(album, direct_mode: true) %></td>
+        <td><%= link_to 'Destroy', album, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Album (Server-side upload)', new_album_path %><br />
+<%= link_to 'New Album (Client-side upload)', new_album_path(direct_mode: true) %>

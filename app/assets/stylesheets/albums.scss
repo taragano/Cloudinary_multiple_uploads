@@ -1,0 +1,17 @@
+// Place all the styles related to the albums controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+#progress_bar_box{
+	border: 1px solid black;
+  height: 15px;
+  width: 200px;
+  display: none;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#progress_bar{
+  background-color: red;
+  height: 100%;
+  width: 0%;
+}

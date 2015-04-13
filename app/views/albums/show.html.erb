@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @album.title %>
+</p>
+
+<% if @album.photos.any? %>
+	<p>
+		<% @album.photos.each do |photo| %>
+			<%= link_to cl_image_tag(photo.image.thumb.url), show_photo_path(photo_id: photo) %>
+		<% end -%>
+	</p>
+<% end %>
+
+<%= link_to 'Edit (Server-side)', edit_album_path(@album) %> |
+<%= link_to 'Edit (Client-side)', edit_album_path(@album, direct_mode: true) %> |
+<%= link_to 'Back', albums_path %>

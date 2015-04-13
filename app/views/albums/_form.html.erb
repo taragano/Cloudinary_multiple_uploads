@@ -1,0 +1,80 @@
+<%= cloudinary_js_config %>
+<%= form_for(@album) do |f| %>
+  <% if @album.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@album.errors.count, "error") %> prohibited this album from being saved:</h2>
+
+      <ul>
+      <% @album.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= f.label :photos, @direct_mode ? "Add new photos (Client-side)" : "Add new photos (Server-side)" %><br>
+    <% if @direct_mode %>
+      <%= f.cl_image_upload :photos, multiple: true %>
+    <% else %>
+      <%= f.file_field :photos, multiple: true %>
+    <% end %>
+  </div>
+
+  <% if @direct_mode %>
+    <div id="progress_bar_box">
+      <div id="progress_bar"></div>
+      <div id="progress_percents"></div>
+    </div>
+    <div id="preview_images"></div>
+  <% end %>
+
+  <div>
+    <% if @album.photos.any? %>
+      Delete photos<br /><br />
+      <%= check_box_tag "select_all" %> Select all <br />
+      <% @album.photos.each do |photo| %>
+        <%= check_box_tag photo.id, "delete" %>
+        <%= cl_image_tag(photo.image.thumb.url) %>
+        <br />
+      <% end %>
+    <% end %>
+  </div>
+  <div class="actions">
+    <%= f.submit data: {confirm: "Are you sure?"} %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#select_all').click(function(event) {  //on click 
+      if(this.checked) { // check select status
+        $('form input:checkbox').each(function() { //loop through each checkbox
+          this.checked = true;  //select all checkboxes with class "checkbox1"               
+        });
+      }else{
+        $('form input:checkbox').each(function() { //loop through each checkbox
+          this.checked = false; //deselect all checkboxes with class "checkbox1"                       
+        });         
+      }
+    });
+    $('.cloudinary-fileupload').on('cloudinarydone', function(e, data){
+      $('#preview_images').append($.cloudinary.image(data.result.public_id, {width: 50, height: 50, crop: "fill"}));
+    })
+    .on('cloudinaryprogressall', function(e, data){
+      $('#progress_bar_box').show();
+      var percents = Math.round((data.loaded * 100.0) / data.total) + '%'
+      $('#progress_percents').text(percents)
+      $('#progress_bar').css('width', percents); 
+    })
+    .on('fileuploadstop', function(){
+      $('#progress_bar_box').hide();
+    });
+  });
+</script>
+
